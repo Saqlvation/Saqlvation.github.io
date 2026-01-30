@@ -12,14 +12,14 @@ const mappa = [
   [0,0,0,0,0,0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,1,1,1,1,0,0],
   [0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,1,0,0,0,0,0,0,0,0,0],
+  [0,0,0,1,0,0,0,0,1,0,0,0,0],
+  [0,1,1,1,0,0,0,0,1,0,0,0,0],
   [0,0,0,0,0,0,0,0,1,0,0,0,0],
   [0,0,0,0,0,0,0,0,1,0,0,0,0],
-  [0,0,0,0,0,0,0,0,1,0,0,0,0],
-  [0,0,0,0,0,0,0,0,1,0,0,0,0],
-  [0,1,0,0,0,0,0,0,0,0,0,0,0],
-  [0,1,1,0,1,1,1,1,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,1,0,0,0,0,0,0,0,0,0,1,0],
+  [0,1,1,0,1,1,1,1,0,0,0,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,1,0],
   [0,0,0,0,0,0,0,0,0,0,0,0,0]
 ];
 
@@ -37,8 +37,9 @@ function stampaPacman(x, y) {
     area.moveTo(x, y);
 
     area.fill()
-
+    area.strokeStyle = "white"; //fa il bordo di pacman bianco
     area.stroke();
+    console.log(x,y);
 
 
 }
@@ -51,13 +52,8 @@ function disegnaMappa() {
         for (let colonna = 0; colonna < mappa[riga].length; colonna++) {
 
             if (mappa[riga][colonna] === 1) {
-                area.fillStyle = "red"; //fa i muri rossi
-                area.fillRect(
-                    colonna * 20,
-                    riga * 20,
-                    20,
-                    20
-                );
+                area.strokeStyle = " red"; //fa i muri rossi
+                area.strokeRect(colonna * 20, riga * 20,20,20); // originariamente usavo fillrect ma strokerect e molto piu carina
             }
         }
     }
