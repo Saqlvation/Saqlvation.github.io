@@ -1,28 +1,57 @@
+
+
+
 <!DOCTYPE html>
-<html lang="en">
-
-<script type="text/javascript" src="canvas.js"></script>
-
+<html>
 <head>
+  <script type="text/javascript" src="canvas.js"></script>
+  <style>
+  body {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+    background-image: url('Pacman-Symbol.png');
+    background-color: #ffffff; 
+    background-repeat: no-repeat;
+    
+    background-position: top;
+    background-color: #fff; 
+  }
+
+  img{
+    width: 140px;
+
+  }
+   canvas{
+    background-color: #000; 
+
+  }
+  header{
+  color: red
+  }
+  </style>
+
     <title>pacman online 4a</title>
 </head>
 <!-- qui onload my fa in automatica all aprertura le 2 funzioni che servono x disegnare le cose principali-->
-<body onload="disegnaMappa(); stampaPacman(130,130)"> 
-    <header>
+<body onload="disegnaMappa(); stampaPacman(30,30)"> 
+  <!-- <header>
         <h1>Pacman</h1>
         <p>Puoi anche usare le freccette! </p>
-    </header>
-    <canvas id="lavagna" width="260" height="260" style="border:1px solid #000000;"></canvas> ;
+    </header> HO NASCOSTO TUTTO PERCHE HO DIRETTAMENTE AGGIUNTO UN  -->
+    <img src="Pacman-Symbol.png" alt="">
+    <canvas id="lavagna" width="260" height="260" style="border:1px solid #000000;"></canvas> 
     <div class="pulsanti">
 
 
-        <input id="su" type="button" onclick="su(20)" value="su">
+      <input id="su" type="button" onclick="su(20)" value="su">
 
-        <input id="giu" type="button" onclick="giu(20)" value="giu">
+      <input id="giu" type="button" onclick="giu(20)" value="giu">
 
-        <input id="sinistra" type="button" onclick="dx(20)" value="destra">
+      <input id="sinistra" type="button" onclick="dx(20)" value="destra">
 
-        <input id="destra" type="button" onclick="sx(20)" value="sinistra">
+      <input id="destra" type="button" onclick="sx(20)" value="sinistra">
 
 
-    </div>
+  </div>
+</body>
