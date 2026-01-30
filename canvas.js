@@ -51,7 +51,7 @@ function disegnaMappa() {
         for (let colonna = 0; colonna < mappa[riga].length; colonna++) {
 
             if (mappa[riga][colonna] === 1) {
-                area.fillStyle = "blue";
+                area.fillStyle = "red"; //fa i muri rossi
                 area.fillRect(
                     colonna * 20,
                     riga * 20,
