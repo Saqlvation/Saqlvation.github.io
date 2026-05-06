@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>APEX OS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>APEX OS</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script type="module">
@@ -568,11 +567,35 @@ body::after {
 .xp-bar-bg { height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; border: 1px solid var(--border); }
 .xp-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; transition: width 0.5s ease; shadow: 0 0 10px var(--accent); }
 
-/* MISSION CARD */
-.mission-card { background: linear-gradient(45deg, var(--surface), var(--surface2)); border: 1px solid var(--accent); border-left: 5px solid var(--accent); padding: 15px; border-radius: 8px; margin-bottom: 16px; animation: pulse-border 2s infinite; }
-@keyframes pulse-border { 0% { border-color: var(--accent); } 50% { border-color: var(--accent2); } 100% { border-color: var(--accent); } }
-.mission-title { font-family: var(--font-head); color: var(--accent2); font-size: 18px; letter-spacing: 1px; }
+.mission-card {
+  background: linear-gradient(180deg, var(--surface2) 0%, var(--surface) 100%);
+  border: 1px solid var(--accent);
+  border-left: 5px solid var(--accent);
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 100%; /* Forza la larghezza piena */
+  display: block; /* Evita che si comporti come un elemento flex stretto */
+  box-shadow: 0 4px 15px rgba(200, 0, 42, 0.2);
+}
 
+.mission-title {
+  font-family: var(--font-head);
+  color: var(--text);
+  font-size: 24px; /* Molto più grande */
+  line-height: 1.2;
+  margin: 10px 0 20px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  word-wrap: break-word; /* Evita che il testo esca dai bordi */
+}
+
+/* Rendi i tasti nella missione più facili da premere su iPhone */
+.mission-card .btn {
+  width: 100%;
+  padding: 15px !important; 
+  font-size: 16px !important;
+  letter-spacing: 2px;
+}
 
 /* RESPONSIVE */
 @media(max-width:600px) {
