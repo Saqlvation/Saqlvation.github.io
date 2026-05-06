@@ -568,32 +568,39 @@ body::after {
 .xp-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; transition: width 0.5s ease; shadow: 0 0 10px var(--accent); }
 
 .mission-card {
-  background: linear-gradient(180deg, var(--surface2) 0%, var(--surface) 100%);
+  background: rgba(200, 0, 42, 0.05);
   border: 1px solid var(--accent);
-  border-left: 5px solid var(--accent);
+  border-radius: 12px;
   padding: 20px;
   margin-bottom: 20px;
-  width: 100%; /* Forza la larghezza piena */
-  display: block; /* Evita che si comporti come un elemento flex stretto */
-  box-shadow: 0 4px 15px rgba(200, 0, 42, 0.2);
+  min-height: 140px; /* Forza un'altezza minima */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: inset 0 0 20px rgba(200, 0, 42, 0.1);
+  position: relative;
 }
 
 .mission-title {
   font-family: var(--font-head);
-  color: var(--text);
-  font-size: 24px; /* Molto più grande */
-  line-height: 1.2;
-  margin: 10px 0 20px 0;
+  color: #fff;
+  font-size: 26px !important; /* Molto più grande per iPhone */
+  line-height: 1.1;
   text-transform: uppercase;
+  margin: 10px 0;
   letter-spacing: 1px;
-  word-wrap: break-word; /* Evita che il testo esca dai bordi */
 }
 
-/* Rendi i tasti nella missione più facili da premere su iPhone */
-.mission-card .btn {
-  width: 100%;
-  padding: 15px !important; 
-  font-size: 16px !important;
+/* Fix per il tasto Reroll nell'header della card */
+.mission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent2);
+  margin-bottom: 5px;
+  text-transform: uppercase;
   letter-spacing: 2px;
 }
 
@@ -1247,43 +1254,47 @@ function renderPomoDots(){
 }
 
 // ===== DASHBOARD =====
-function renderDash(){
+function renderDash() {
   // 1. Esegui aggiornamenti logici
   if (typeof updateDailyMission === "function") updateDailyMission();
   if (typeof updateXPBar === "function") updateXPBar();
 
   // 2. Calcoli statistiche
-  const doneT=S.tasks.filter(t=>t.done).length;
-  const totalT=S.tasks.length;
-  const maxStreak=S.habits.reduce((a,h)=>Math.max(a,h.streak),0);
-  const habitRate=S.habits.length?Math.round(S.habits.reduce((a,h)=>a+h.week.filter(Boolean).length,0)/(S.habits.length*7)*100):0;
-  const highD=S.tasks.filter(t=>t.priority==='high'&&t.done).length;
-  const highT=S.tasks.filter(t=>t.priority==='high').length;
-  const fq=QUOTES[Math.floor((new Date().getDate())%QUOTES.length)];
+  const doneT = S.tasks.filter(t => t.done).length;
+  const totalT = S.tasks.length;
+  const maxStreak = S.habits.reduce((a, h) => Math.max(a, h.streak), 0);
+  const habitRate = S.habits.length ? Math.round(S.habits.reduce((a, h) => a + h.week.filter(Boolean).length, 0) / (S.habits.length * 7) * 100) : 0;
+  const fq = QUOTES[Math.floor((new Date().getDate()) % QUOTES.length)];
+  
+  // Controllo stato missione
+  const todayDone = S.lastMissionDoneDate === new Date().toDateString();
 
   // 3. Render HTML totale
-  document.getElementById('dash-inner').innerHTML=`
-    ${!window._firebaseReady?`<div class="firebase-notice"><i class="fa-solid fa-cloud-arrow-up"></i> Cloud sync not configured. Saving locally only.</div>`:''}
+  document.getElementById('dash-inner').innerHTML = `
+    ${!window._firebaseReady ? `<div class="firebase-notice"><i class="fa-solid fa-cloud-arrow-up"></i> Cloud sync not configured. Saving locally only.</div>` : ''}
     
-<div class="mission-card" style="position:relative; overflow:hidden; margin-bottom: 20px;">
-      <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:var(--accent); opacity:0.3;"></div>
+    <div class="mission-card" style="min-height: 160px; display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 20px;">
+      <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:var(--accent); opacity:0.5;"></div>
       
-      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-        <div class="sec-sub" style="color:var(--accent2); margin-bottom:8px; letter-spacing:3px; font-weight:bold;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="sec-sub" style="color:var(--accent2); font-weight:bold; letter-spacing:2px;">
           <i class="fa-solid fa-radiation"></i> ACTIVE MISSION
         </div>
-        <button onclick="shuffleMission()" style="background:transparent; border:none; color:var(--text3); cursor:pointer; font-size:12px;">
+        <button onclick="shuffleMission()" style="background:transparent; border:none; color:var(--text3); cursor:pointer; font-family:var(--font-mono); font-size:10px;">
           <i class="fa-solid fa-rotate"></i> REROLL (1 XP)
         </button>
       </div>
 
-      <div class="mission-title" style="font-size:20px; margin-bottom:15px; line-height:1.2; text-transform:uppercase;">
-        ${S.currentMission || "SCANNING FOR OBJECTIVES..."}
+      <div class="mission-title" style="font-size:24px; margin: 15px 0; line-height:1.1; text-transform:uppercase; color: #fff; text-shadow: 0 0 10px rgba(255,51,85,0.3);">
+        ${S.currentMission || "INITIALIZING OBJECTIVE..."}
       </div>
 
-      <button class="btn sm" onclick="completeDailyMission()" style="width:100%; justify-content:center; background:linear-gradient(90deg, rgba(200,0,42,0.3), transparent); border:1px solid var(--accent); font-family:var(--font-mono);">
-        <i class="fa-solid fa-check-double"></i> EXECUTE & CLAIM 50 XP
-      </button>
+      ${todayDone ? 
+        `<div style="text-align:center; padding: 10px; border: 1px solid var(--teal); color: var(--teal); font-family: var(--font-mono); font-size: 12px; border-radius: 4px;">MISSION ACCOMPLISHED</div>` :
+        `<button class="btn" onclick="completeDailyMission()" style="width:100%; height: 45px; justify-content:center; background: linear-gradient(90deg, var(--accent), var(--accent2));">
+          EXECUTE & CLAIM 50 XP
+        </button>`
+      }
     </div>
 
     <div class="dash-stats">
@@ -1302,7 +1313,7 @@ function renderDash(){
       <div class="stat g">
         <div class="stat-accent" style="background:#4caf50"></div>
         <div class="stat-icon"><i class="fa-solid fa-hourglass-half" style="color:#4caf50"></i></div>
-        <div class="stat-val">${S.pomoToday}</div>
+        <div class="stat-val">${S.pomoToday || 0}</div>
         <div class="stat-lab">Pomodoros Today</div>
       </div>
       <div class="stat y">
@@ -1318,9 +1329,7 @@ function renderDash(){
         <div class="card-title"><i class="fa-solid fa-chart-line"></i> WEEKLY PROGRESS</div>
         ${[
           {label:'Task Completion',val:totalT?Math.round(doneT/totalT*100):0,col:'#c8002a'},
-          {label:'Habit Consistency',val:habitRate,col:'#00b4b4'},
-          {label:'High Priority Tasks',val:highT?Math.round(highD/highT*100):0,col:'#d4a017'},
-          {label:'Focus Sessions',val:Math.min(100,S.pomoToday*10),col:'#4caf50'},
+          {label:'Habit Consistency',val:habitRate,col:'#00b4b4'}
         ].map(p=>`
           <div class="prog-item">
             <div class="prog-row"><span class="prog-name">${p.label}</span><span class="prog-pct">${p.val}%</span></div>
@@ -1336,13 +1345,12 @@ function renderDash(){
             const d=h.week.filter(Boolean).length; const pct=d/7;
             const r=22; const c=2*Math.PI*r;
             return `<div style="text-align:center">
-              <svg width="54" height="54" viewBox="0 0 54 54" style="transform:rotate(-90deg)">
+              <svg width="45" height="45" viewBox="0 0 54 54" style="transform:rotate(-90deg)">
                 <circle cx="27" cy="27" r="${r}" fill="none" stroke="#1e1e30" stroke-width="5"/>
                 <circle cx="27" cy="27" r="${r}" fill="none" stroke="${h.streak>5?'#d4a017':'#c8002a'}" stroke-width="5"
                   stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${(c*(1-pct)).toFixed(2)}" stroke-linecap="round"/>
               </svg>
-              <div style="font-size:18px;margin-top:-4px">${h.icon}</div>
-              <div style="font-family:var(--font-mono);font-size:9px;color:var(--text3);max-width:52px;margin:0 auto">${h.name.split(' ')[0]}</div>
+              <div style="font-size:14px;margin-top:-2px">${h.icon}</div>
             </div>`;
           }).join('')}
         </div>
@@ -1352,7 +1360,6 @@ function renderDash(){
     <div class="quote-card">
       <div class="quote-text">"${fq.text}"</div>
       <div class="quote-author">— ${fq.author}</div>
-      <div class="quote-source">${fq.source}</div>
     </div>
   `;
 }
